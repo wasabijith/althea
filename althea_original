@@ -1,0 +1,446 @@
+//code for images in the game 
+var points; 
+var images = []; 
+appendItem(images,"http://clipart-library.com/images/8cAEdbjRi.jpg");
+appendItem(images,"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQv5BEs-PfIIfqtulfH85NPC9ss1YS36KTjEpw7Mn_UAGmMkUUW&usqp=CAU"); 
+//characterfunction 
+function characterOfPerson(points)
+{
+  if (points == 18)
+  {
+    var userMessageGoodfinish = 
+    ("Congratulations! You have completed the game and Althea has escaped to a better society!" 
+    + "Based on the choices you have made in the game, Althea is a good person with high morals."); 
+    setText("character", userMessageGoodfinish); 
+  } 
+  else if (points > 12 && points < 17)
+  {
+    var userMessageBadfinish = ("Congratulations! You have completed the game and Althea has escaped to a"
+    +"better society! Based on the choices you have made in the game, Althea is not a very good person with low morals.");
+    setText("character", userMessageBadfinish); 
+  }
+  else 
+  {
+    var userMessageFail = "You have not made the appropriate choices for Althea to escape Kipler!" 
+    + "Try again to see what better choices you could've made to save Althea!"; 
+    setText("character", userMessageFail); 
+  }
+}
+//timerfunction 
+var myfunc;
+
+function runTimer(timer, time) 
+{
+  var counter = time;
+  myfunc = setInterval(function () 
+  {
+    counter = counter - 1;
+    setText(timer, counter);
+  if (counter == 0)
+  {
+    clearInterval(myfunc);
+    setScreen("uhoh!");
+  }
+  }, 1000);
+}
+//timeranoutscreen 
+onEvent("uhohreturn","click", function()
+{
+  playSound("sound://category_app/modern_ui_sound.mp3");
+  setScreen("welcomescreen"); 
+}); 
+//pointscreen
+onEvent("pointreturn","click",function()
+{
+  playSound("sound://category_app/modern_ui_sound.mp3");
+  setScreen("welcomescreen"); 
+}); 
+//welcomescreen code
+setImageURL("titleimage", images[1]); 
+//code brings you into the game
+onEvent("playbutton", "click", function()
+{
+ points = 0; 
+ setScreen("namescreen");
+ playSound("sound://category_app/app_interface_click_3.mp3");
+});
+//namescreencode
+onEvent("submitBtn", "click", function()
+{
+    playSound("sound://category_app/modern_ui_sound.mp3");
+    var userName = getText("nameInput");
+    var userAge = getText("ageInput"); 
+    var userPlace = getText("placeInput");
+    var userGender = getText("genderDrop"); 
+    var userMessage = ("Hello " + userName + ".");
+    var userMessage2 = ("You have identified as a " + userGender + " and you're " + userAge + " years old."); 
+    var userMessage3 = ("My name is Althea! It's cool that you're from " + userPlace + "."); 
+    var userMessage4 = ("Welcome to Kipler, I need your help " + userName + ".");
+    var userMessage5 = ("Can you help me?"); 
+    setText("textDisplay", userMessage); 
+    setText("textDisplay2", userMessage2); 
+    setText("textDisplay3", userMessage3); 
+    setText("textDisplay4", userMessage4); 
+    setText("textDisplay5", userMessage5); 
+} );
+//GIVE POINT HERE (FREE)
+onEvent("icanhelp","click",function()
+{
+  playSound("sound://category_app/modern_ui_sound.mp3");
+  setScreen("screen1");
+  points = points + 1;
+}); 
+onEvent("noimsorry", "click",function()
+{
+  playSound("sound://category_app/modern_ui_sound.mp3");
+  setScreen("welcomescreen"); 
+}); 
+//screen1  
+onEvent("firstnext","click",function()
+{
+ setScreen("screen2");
+ playSound("sound://category_app/modern_ui_sound.mp3");
+}); 
+//screen2  
+onEvent("2next", "click", function () 
+{
+  setScreen("screen3");
+  playSound("sound://category_app/modern_ui_sound.mp3");
+  runTimer("timer", 30);
+});
+
+//screen 3 
+//code to help user with timer
+ onEvent("question", "mouseover", function()
+  {
+  var userhelp = ("For every choice, there is a time limit!"); 
+  setText("helpme", userhelp);
+  }); 
+ onEvent("question", "mouseout", function()
+ {
+   hideElement("helpme");
+ }); 
+//GIVE POINT HERE (CORRECT CHOICE)
+//code for hide sequence
+ onEvent("hide", "click", function()
+ {
+  points = points + 1;
+  clearInterval(myfunc); 
+  playSound("sound://category_app/modern_ui_sound.mp3");
+  playSound("sound://category_swish/heavy_axe_swing.mp3");
+  playSound("sound://category_human/character_kimberly_what_are_they_doing_here.mp3"); 
+  setScreen("hidewall"); 
+ }); 
+ onEvent("continuehidewall", "click", function()
+ {
+   clearInterval(myfunc); 
+   playSound("sound://category_app/modern_ui_sound.mp3"); 
+   setScreen("hidewall2"); 
+   runTimer("timer2", 30); 
+ }); 
+ //GIVE POINT HERE (CORRECT CHOICE)
+ onEvent("walkaway","click",function()
+ {
+   clearInterval(myfunc); 
+   points = points + 1;
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("hidewall3"); 
+   runTimer("timer3", 30); 
+ }); 
+ onEvent("money","click",function()
+ {
+   clearInterval(myfunc); 
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("suitcase"); 
+   hideElement("text_area10"); 
+   hideElement("returnsuit"); 
+ });
+  onEvent("continuesuit","click",function()
+ {
+   clearInterval(myfunc); 
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   showElement("text_area10"); 
+   showElement("returnsuit"); 
+ });
+ onEvent("returnsuit", "click", function()
+ {
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("pointscreen"); 
+   setText("score", points); 
+   characterOfPerson(points); 
+ });
+//GIVE POINT HERE (CORRECT CHOICE)
+ onEvent("duffel","click",function()
+ {
+   points = points + 1;
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("duff");
+   playSound("sound://category_human/character_yury_crying_1.mp3");
+   runTimer("timer4", 30); 
+ }); 
+//GIVE 3 POINTS HERE (UNSELFISH CHOICE)
+  onEvent("whodat","click",function()
+ {
+   points = points + 3;
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("yesboi"); 
+   runTimer("text_input20", 30); 
+ }); 
+ //GIVE 3 POINT HERE (UNSELFISH CHOICE)
+   onEvent("helpboi","click",function()
+ {
+   points = points + 3;
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   playSound("sound://category_human/character_jimmy_thanks_1.mp3"); 
+   setScreen("hamilton"); 
+ }); 
+ //GIVE 1 POINT HERE (CORRECT CHOICE)
+   onEvent("comewithme","click",function()
+   {
+     points = points + 3;
+     clearInterval(myfunc);
+     playSound("sound://category_app/modern_ui_sound.mp3");
+     setScreen("noboi"); 
+   }); 
+//GIVE 2 POINT HERE (SELFISH CHOICE)
+   onEvent("nosrry","click",function()
+ {
+   points = points + 2;
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("noboi"); 
+ }); 
+  onEvent("whocares","click",function()
+ {
+   points = points + 2;
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("noboi"); 
+ }); 
+ 
+  onEvent("taser","click",function()
+ {
+   points = points + 1;
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("tase");
+   playSound("sound://category_human/character_yury_crying_1.mp3");
+   runTimer("timer5", 30);
+ }); 
+  onEvent("checkit","click",function()
+ {
+   points = points + 3;
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   hideElement("text_area20");
+   hideElement("continueboi"); 
+   setScreen("yesboi2"); 
+ }); 
+ 
+ onEvent("taseboi","click",function()
+ {
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   playSound("sound://category_male_voiceover/hold_male.mp3");
+   playSound("sound://category_movement/spun_power_down_2.mp3");
+   showElement("text_area20");
+   showElement("continueboi"); 
+ }); 
+ onEvent("continueboi","click",function()
+ {
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("hamilton"); 
+   playSound("sound://category_human/character_jimmy_thanks_1.mp3"); 
+ }); 
+ onEvent("comewithme","click",function()
+ {
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("noboi"); 
+ });   
+ 
+ onEvent("dontcare","click",function()
+ {
+   points = points + 2;
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("noboi"); 
+ }); 
+  onEvent("climb","click",function()
+ {
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   playSound("sound://category_movement/footstep_on_rock_or_ice_with_debris_2.mp3"); 
+   playSound("sound://category_movement/footstep_on_rock_or_ice_with_debris_9.mp3"); 
+   setScreen("finalalmost"); 
+ }); 
+  onEvent("bridge","click",function()
+ {
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   playSound("sound://category_movement/footstep_on_rock_or_ice_with_debris_2.mp3");
+   playSound("sound://category_movement/walk_loop.mp3"); 
+   setScreen("final"); 
+ }); 
+   onEvent("returnfinal","click",function()
+ {
+   points = points + 5;
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("pointscreen"); 
+   setText("score", points); 
+   characterOfPerson(points); 
+ }); 
+ 
+ onEvent("takedown","click",function()
+ {
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("takeguardcontd");
+   runTimer("text_input12", 30);
+ }); 
+
+
+//code for opendoor sequence
+ onEvent("opendoor", "click", function()
+ {
+  clearInterval(myfunc);
+  playSound("sound://category_app/modern_ui_sound.mp3");
+  playSound("sound://category_objects/metal_pot_2.mp3");
+  setScreen("opendoorsequence"); 
+  runTimer("text_input8", 30); 
+ }); 
+  onEvent("takeguarddown","click",function()
+   {
+     clearInterval(myfunc);
+     playSound("sound://category_app/modern_ui_sound.mp3");
+     setScreen("takeguardcontd"); 
+     runTimer("text_input12", 30); 
+   });  
+      onEvent("usehands", "click", function()
+      {
+        clearInterval(myfunc);
+        playSound("sound://category_app/modern_ui_sound.mp3");
+        playSound("sound://category_jump/ninja_jump_2.mp3"); 
+        setScreen("endtakeguarddown"); 
+      }); 
+      onEvent("roundhouse", "click", function()
+      {
+        clearInterval(myfunc);
+        playSound("sound://category_app/modern_ui_sound.mp3");
+        playSound("sound://category_jump/ninja_jump_2.mp3"); 
+        setScreen("endtakeguarddown"); 
+      }); 
+      onEvent("climbattack", "click", function()
+      {
+        clearInterval(myfunc);
+        playSound("sound://category_app/modern_ui_sound.mp3");
+        playSound("sound://category_jump/ninja_jump_2.mp3"); 
+        setScreen("endtakeguarddown"); 
+      }); 
+          onEvent("returntakeguard","click",function()
+          {
+            clearInterval(myfunc);
+            playSound("sound://category_app/modern_ui_sound.mp3");
+            setScreen("pointscreen"); 
+            setText("score", points);
+            characterOfPerson(points);
+          }); 
+          
+  onEvent("closedoor","click",function()
+   {
+    clearInterval(myfunc);
+    playSound("sound://category_app/modern_ui_sound.mp3");
+    playSound("sound://category_objects/metal_pot_2.mp3"); 
+    setScreen("closedoorcontd"); 
+    runTimer("text_input3", 30); 
+   });
+    onEvent("hidedoor","click", function()
+    {
+      clearInterval(myfunc);
+      playSound("sound://category_app/modern_ui_sound.mp3");
+      setScreen("closedoorcontd2");
+    }); 
+        onEvent("returnclosedoor1","click", function()
+       {
+         clearInterval(myfunc);
+         playSound("sound://category_app/modern_ui_sound.mp3");
+         setScreen("pointscreen"); 
+         setText("score", points);
+         characterOfPerson(points);
+       }); 
+    onEvent("actdead","click", function()
+    {
+      clearInterval(myfunc);
+      playSound("sound://category_app/modern_ui_sound.mp3");
+      setScreen("closedoorcontd3"); 
+    }); 
+        onEvent("returnclosedoor2","click", function()
+       {
+         clearInterval(myfunc);
+         playSound("sound://category_app/modern_ui_sound.mp3");
+         setScreen("pointscreen"); 
+         setText("score", points); 
+         characterOfPerson(points);
+       }); 
+
+   
+//code for continuewalking sequence
+ onEvent("continuewalking", "click", function()
+ {
+  clearInterval(myfunc);
+  playSound("sound://category_app/modern_ui_sound.mp3");
+  playSound("sound://category_movement/walk_loop.mp3");
+  setScreen("walkingscreen");
+ }); 
+ hideElement("walktxt");
+ hideElement("home1"); 
+ onEvent("continue1", "click", function()
+ {
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   showElement("walktxt");
+   showElement("home1");
+   playSound("sound://category_male_voiceover/hold_male.mp3");
+   playSound("sound://category_movement/spun_power_down_2.mp3");
+ }); 
+ onEvent("home1", "click", function()
+ {
+   clearInterval(myfunc);
+   playSound("sound://category_app/modern_ui_sound.mp3");
+   setScreen("pointscreen");
+   setText("score", points); 
+   characterOfPerson(points);
+ }); 
+ 
+ 
+//creditscreen code
+ onEvent("creditsbutton", "click", function()
+  {
+  setScreen("creditscreen");
+  playSound("sound://category_app/modern_ui_sound.mp3");
+  setImageURL("smileyface", images[0]);
+  });
+onEvent("returnfromcredit", "click", function()
+{
+  setScreen("welcomescreen");
+  playSound("sound://category_app/modern_ui_sound.mp3");
+}); 
+//instructionscreen code
+onEvent("instructionsbutton", "click", function()
+{
+ setScreen("instructionscreen");
+ playSound("sound://category_app/modern_ui_sound.mp3");
+});
+onEvent("returnfrominstruction","click", function()
+{
+  setScreen("welcomescreen");
+  playSound("sound://category_app/modern_ui_sound.mp3");
+}); 
+//plays the sound for the general game
+playSound("Idle-Human-In-Game-Song!--FULL-OST-.mp3", true);
